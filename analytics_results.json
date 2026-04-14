@@ -1,0 +1,71 @@
+{
+  "accuracy": 95.19999999999999,
+  "precision": 88.11881188118812,
+  "recall": 88.11881188118812,
+  "f1_score": 88.11881188118812,
+  "roc_auc": 99.07690017122013,
+  "tn": 387,
+  "fp": 12,
+  "fn": 12,
+  "tp": 89,
+  "sensitivity": 88.11881188118812,
+  "specificity": 96.99248120300751,
+  "fpr": 3.007518796992481,
+  "fnr": 11.881188118811881,
+  "actual_churn": 101,
+  "actual_no_churn": 399,
+  "pred_churn": 101,
+  "pred_no_churn": 399,
+  "top_features": [
+    {
+      "Feature": "tenure",
+      "Importance": 0.30545247883081805,
+      "Importance %": 30.545247883081807
+    },
+    {
+      "Feature": "MonthlyCharges",
+      "Importance": 0.16564585305720675,
+      "Importance %": 16.564585305720676
+    },
+    {
+      "Feature": "Contract",
+      "Importance": 0.12381495885526476,
+      "Importance %": 12.381495885526476
+    },
+    {
+      "Feature": "TotalCharges",
+      "Importance": 0.10977094437769355,
+      "Importance %": 10.977094437769356
+    },
+    {
+      "Feature": "OnlineBackup",
+      "Importance": 0.035688202827279754,
+      "Importance %": 3.5688202827279754
+    },
+    {
+      "Feature": "OnlineSecurity",
+      "Importance": 0.028589110525151593,
+      "Importance %": 2.8589110525151593
+    },
+    {
+      "Feature": "TechSupport",
+      "Importance": 0.027593387523532662,
+      "Importance %": 2.7593387523532664
+    },
+    {
+      "Feature": "MultipleLines",
+      "Importance": 0.025741123823730564,
+      "Importance %": 2.5741123823730563
+    },
+    {
+      "Feature": "InternetService",
+      "Importance": 0.023646680563252715,
+      "Importance %": 2.3646680563252716
+    },
+    {
+      "Feature": "Partner",
+      "Importance": 0.02096924788940612,
+      "Importance %": 2.096924788940612
+    }
+  ]
+}

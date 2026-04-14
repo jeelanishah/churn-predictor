@@ -1,0 +1,36 @@
+customerID,gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,Churn
+7590-VHVEG,Female,0,Yes,No,1,No,No phone service,DSL,No,Yes,No,No,No,No,Month-to-month,Yes,Electronic check,29.85,29.85,No
+5575-GNVDE,Male,0,No,No,34,Yes,No,DSL,Yes,No,Yes,No,No,No,One year,No,Mailed check,56.95,1937.9,No
+3668-QPYBK,Male,0,No,No,2,Yes,No,DSL,Yes,Yes,No,No,No,No,Month-to-month,Yes,Mailed check,53.85,108.15,Yes
+7795-CFOCW,Male,0,No,No,45,No,No phone service,DSL,Yes,No,Yes,Yes,No,Yes,One year,No,Bank transfer (automatic),42.3,1840.75,No
+3382-TCVEA,Female,0,Yes,Yes,2,Yes,No,Fiber optic,No,No,No,No,No,No,Month-to-month,Yes,Electronic check,70.7,151.65,Yes
+1371-DWPAZ,Male,0,Yes,No,11,Yes,Yes,DSL,Yes,No,No,No,No,No,One year,No,Bank transfer (automatic),65.1,771.05,No
+7241-PGEW1,Female,0,Yes,Yes,16,Yes,No,Fiber optic,No,No,No,No,No,No,Two year,Yes,Bank transfer (automatic),80.5,1288.15,No
+5572-XPSkip,Male,0,No,No,1,No,No phone service,DSL,Yes,Yes,Yes,Yes,No,No,Month-to-month,Yes,Electronic check,50.25,50.25,Yes
+2813-IOHJC,Female,0,No,Yes,33,Yes,Yes,Fiber optic,Yes,Yes,No,Yes,Yes,Yes,Month-to-month,Yes,Mailed check,97.75,3331.55,No
+7029-BFRCE,Male,0,No,No,3,Yes,No,DSL,Yes,No,Yes,No,No,No,Month-to-month,Yes,Electronic check,49.3,147.9,Yes
+2520-SGTTA,Female,0,No,Yes,29,Yes,Yes,Fiber optic,No,No,Yes,No,Yes,Yes,One year,Yes,Credit card (automatic),84.1,2434.9,No
+2923-ARZLG,Male,0,No,No,55,Yes,No,DSL,Yes,Yes,Yes,Yes,No,No,Two year,No,Mailed check,56.15,3091.25,No
+4115-JBEVS,Male,0,No,No,26,Yes,No,DSL,No,Yes,Yes,No,No,No,Month-to-month,Yes,Electronic check,55.35,1440.1,Yes
+6713-OKOMC,Female,0,No,No,8,No,No phone service,DSL,Yes,No,No,Yes,No,No,Month-to-month,No,Bank transfer (automatic),40.65,325.2,No
+1524-BKGXS,Female,0,No,No,6,Yes,No,Fiber optic,Yes,No,No,No,No,No,Month-to-month,Yes,Electronic check,73.45,440.7,Yes
+5614-JBEVS,Male,0,No,No,8,Yes,Yes,Fiber optic,No,Yes,No,Yes,No,Yes,One year,No,Credit card (automatic),86.5,692,No
+3756-XSGUU,Male,0,Yes,No,31,Yes,Yes,Fiber optic,No,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic check,88.15,2775.35,Yes
+2607-CTLTC,Female,0,No,No,6,Yes,No,DSL,Yes,No,No,No,No,No,Month-to-month,No,Electronic check,43.25,259.5,No
+3614-SHPST,Female,0,Yes,No,24,Yes,No,DSL,Yes,Yes,No,Yes,Yes,No,One year,Yes,Mailed check,60.5,1494.5,No
+1410-XUSHG,Male,0,No,No,8,Yes,No,DSL,No,No,No,No,No,No,Month-to-month,No,Electronic check,47.95,383.6,Yes
+7046-TTKNT,Male,0,No,No,2,Yes,No,DSL,Yes,No,No,No,No,No,Month-to-month,Yes,Electronic check,53.85,108.15,Yes
+1234-ABCDE,Female,0,Yes,Yes,12,Yes,Yes,Fiber optic,Yes,Yes,Yes,Yes,Yes,Yes,One year,Yes,Bank transfer (automatic),89.0,1068,No
+5678-FGHIJ,Male,0,No,No,24,Yes,No,DSL,Yes,No,No,No,No,No,Month-to-month,No,Mailed check,65.5,1572,No
+9012-KLMNO,Female,0,Yes,No,36,No,No phone service,Fiber optic,No,Yes,No,Yes,No,Yes,Two year,Yes,Credit card (automatic),75.0,2700,No
+3456-PQRST,Male,0,No,Yes,48,Yes,Yes,DSL,Yes,Yes,Yes,No,No,No,One year,No,Bank transfer (automatic),70.0,3360,Yes
+7890-UVWXY,Female,0,No,No,60,Yes,No,Fiber optic,Yes,No,Yes,Yes,Yes,No,Two year,Yes,Electronic check,95.0,5700,No
+1111-ZZZZZ,Male,0,Yes,No,18,Yes,Yes,DSL,No,No,No,No,No,No,Month-to-month,Yes,Mailed check,55.0,990,Yes
+2222-YYYYY,Female,0,No,No,72,Yes,No,Fiber optic,Yes,Yes,Yes,Yes,Yes,Yes,Two year,No,Bank transfer (automatic),100.0,7200,No
+3333-XXXXX,Male,0,Yes,Yes,6,No,No phone service,DSL,Yes,No,No,No,No,No,Month-to-month,Yes,Electronic check,50.0,300,Yes
+4444-WWWWW,Female,0,No,No,30,Yes,Yes,Fiber optic,No,Yes,No,Yes,No,Yes,One year,Yes,Credit card (automatic),85.0,2550,No
+5555-VVVVV,Male,0,Yes,No,42,Yes,No,DSL,Yes,Yes,Yes,No,No,No,Two year,No,Mailed check,60.0,2520,No
+6666-UUUUU,Female,0,No,Yes,24,Yes,Yes,DSL,Yes,No,No,Yes,Yes,No,One year,Yes,Bank transfer (automatic),75.5,1812,Yes
+7777-TTTTT,Male,0,No,No,54,No,No phone service,Fiber optic,Yes,Yes,No,Yes,Yes,Yes,Two year,No,Electronic check,90.0,4860,No
+8888-SSSSS,Female,0,Yes,No,12,Yes,No,DSL,No,Yes,Yes,No,No,No,Month-to-month,Yes,Mailed check,65.0,780,Yes
+9999-RRRRR,Male,0,No,No,66,Yes,Yes,Fiber optic,Yes,No,Yes,Yes,No,Yes,Two year,Yes,Bank transfer (automatic),95.5,6303,No

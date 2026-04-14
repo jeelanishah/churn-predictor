@@ -1,0 +1,131 @@
+"""
+CHURN PREDICTOR - Training Script
+Trains ML model and saves artifacts
+"""
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import joblib
+import os
+import warnings
+warnings.filterwarnings('ignore')
+
+print("=" * 60)
+print("🚀 CHURN PREDICTOR - MODEL TRAINING")
+print("=" * 60)
+
+# Step 1: Load data
+print("\n📊 Step 1: Loading data...")
+try:
+    df = pd.read_csv('../data/churn_data.csv')
+    print(f"✅ Data loaded! Shape: {df.shape}")
+except FileNotFoundError:
+    print("❌ Error: churn_data.csv not found in data/ folder")
+    exit()
+
+# Step 2: Explore data
+print("\n🔍 Step 2: Exploring data...")
+print(f"Columns: {df.columns.tolist()}")
+
+# Step 3: Data cleaning
+print("\n🧹 Step 3: Cleaning data...")
+df = df.dropna()
+print(f"✅ Removed NaN values. Shape: {df.shape}")
+
+# Step 4: Prepare features
+print("\n🎯 Step 4: Preparing features...")
+X = df.copy()
+target_col = 'Churn' if 'Churn' in X.columns else X.columns[-1]
+y = X[target_col].copy()
+X = X.drop(target_col, axis=1)
+
+# Encode target variable
+if y.dtype == 'object':
+    le_target = LabelEncoder()
+    y = le_target.fit_transform(y)
+    joblib.dump(le_target, 'target_encoder.pkl')
+
+# Encode categorical columns
+label_encoders = {}
+for col in X.columns:
+    if X[col].dtype == 'object':
+        le = LabelEncoder()
+        X[col] = le.fit_transform(X[col])
+        label_encoders[col] = le
+
+feature_names = X.columns.tolist()
+print(f"✅ Features prepared: {len(feature_names)} features")
+
+# Step 5: Split data
+print("\n📈 Step 5: Splitting data (80-20)...")
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+print(f"✅ Train: {X_train.shape[0]}, Test: {X_test.shape[0]}")
+
+# Step 6: Scale features
+print("\n📏 Step 6: Scaling features...")
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+print(f"✅ Features scaled")
+
+# Step 7: Train model
+print("\n🤖 Step 7: Training RandomForest model...")
+model = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=15,
+    min_samples_split=5,
+    random_state=42,
+    n_jobs=-1
+)
+model.fit(X_train_scaled, y_train)
+print(f"✅ Model trained")
+
+# Step 8: Evaluate model
+print("\n📊 Step 8: Evaluating model...")
+y_pred_train = model.predict(X_train_scaled)
+y_pred_test = model.predict(X_test_scaled)
+
+train_acc = accuracy_score(y_train, y_pred_train)
+test_acc = accuracy_score(y_test, y_pred_test)
+precision = precision_score(y_test, y_pred_test)
+recall = recall_score(y_test, y_pred_test)
+f1 = f1_score(y_test, y_pred_test)
+
+print(f"✅ Model Performance:")
+print(f"   Training Accuracy: {train_acc:.2%}")
+print(f"   Testing Accuracy:  {test_acc:.2%}")
+print(f"   Precision:         {precision:.2%}")
+print(f"   Recall:            {recall:.2%}")
+print(f"   F1-Score:          {f1:.2%}")
+
+# Step 9: Save artifacts
+print("\n💾 Step 9: Saving model artifacts...")
+joblib.dump(model, 'churn_model.pkl')
+print(f"   ✅ churn_model.pkl")
+
+joblib.dump(scaler, 'scaler.pkl')
+print(f"   ✅ scaler.pkl")
+
+joblib.dump(feature_names, 'feature_names.pkl')
+print(f"   ✅ feature_names.pkl")
+
+joblib.dump(label_encoders, 'label_encoders.pkl')
+print(f"   ✅ label_encoders.pkl")
+
+# Summary
+print("\n" + "=" * 60)
+print("🎉 MODEL TRAINING COMPLETE!")
+print("=" * 60)
+print(f"✅ Model Accuracy: {test_acc:.2%}")
+print(f"✅ Files saved in model/ folder:")
+print(f"   1. churn_model.pkl")
+print(f"   2. scaler.pkl")
+print(f"   3. feature_names.pkl")
+print(f"   4. label_encoders.pkl")
+print("=" * 60)

@@ -74,6 +74,9 @@ class TestPredictEncoding(unittest.TestCase):
         )
 
         self.assertEqual(result["status"], "error")
+        self.assertTrue(len(result["error"]) > 0)
+        self.assertIn("gender", result["error"])
+        self.assertIn("Unknown", result["error"])
 
 
 if __name__ == "__main__":

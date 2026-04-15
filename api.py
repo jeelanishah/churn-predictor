@@ -58,6 +58,17 @@ class ChurnPredictor:
             
             # Ensure correct column order (IMPORTANT!)
             df = df[self.feature_names]
+
+            # Encode categorical features before scaling
+            for column, encoder in self.label_encoders.items():
+                if column in df.columns:
+                    try:
+                        df[column] = encoder.transform(df[column])
+                    except ValueError as e:
+                        return {
+                            "error": f"Invalid value for '{column}': {df[column].iloc[0]}. {str(e)}",
+                            "status": "error"
+                        }
             
             # Scale features
             X_scaled = self.scaler.transform(df)

@@ -134,31 +134,31 @@ elif page == "👤 Single Prediction":
     col1, col2 = st.columns(2)
     
     with col1:
-        gender = st.selectbox("Gender", [0, 1], format_func=lambda x: ["Male", "Female"][x], key="gender")
+        gender = st.selectbox("Gender", ["Male", "Female"], key="gender")
         senior_citizen = st.selectbox("Senior Citizen", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="senior")
-        partner = st.selectbox("Partner", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="partner")
-        dependents = st.selectbox("Dependents", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="dependents")
+        partner = st.selectbox("Partner", ["No", "Yes"], key="partner")
+        dependents = st.selectbox("Dependents", ["No", "Yes"], key="dependents")
         tenure = st.number_input("Tenure (months)", min_value=0, max_value=72, value=24, key="tenure")
     
     with col2:
-        phone_service = st.selectbox("Phone Service", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="phone")
-        multiple_lines = st.selectbox("Multiple Lines", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="multilines")
-        internet_service = st.selectbox("Internet Service", [0, 1, 2], format_func=lambda x: ["DSL", "Fiber optic", "No"][x], key="internet")
-        online_security = st.selectbox("Online Security", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="security")
-        online_backup = st.selectbox("Online Backup", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="backup")
+        phone_service = st.selectbox("Phone Service", ["No", "Yes"], key="phone")
+        multiple_lines = st.selectbox("Multiple Lines", ["No", "Yes", "No phone service"], key="multilines")
+        internet_service = st.selectbox("Internet Service", ["DSL", "Fiber optic", "No"], key="internet")
+        online_security = st.selectbox("Online Security", ["No", "Yes", "No internet service"], key="security")
+        online_backup = st.selectbox("Online Backup", ["No", "Yes", "No internet service"], key="backup")
     
     col3, col4 = st.columns(2)
     
     with col3:
-        device_protection = st.selectbox("Device Protection", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="device")
-        tech_support = st.selectbox("Tech Support", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="tech")
-        streaming_tv = st.selectbox("Streaming TV", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="tv")
-        streaming_movies = st.selectbox("Streaming Movies", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="movies")
+        device_protection = st.selectbox("Device Protection", ["No", "Yes", "No internet service"], key="device")
+        tech_support = st.selectbox("Tech Support", ["No", "Yes", "No internet service"], key="tech")
+        streaming_tv = st.selectbox("Streaming TV", ["No", "Yes", "No internet service"], key="tv")
+        streaming_movies = st.selectbox("Streaming Movies", ["No", "Yes", "No internet service"], key="movies")
     
     with col4:
-        contract = st.selectbox("Contract", [0, 1, 2], format_func=lambda x: ["Month-to-month", "One year", "Two year"][x], key="contract")
-        paperless_billing = st.selectbox("Paperless Billing", [0, 1], format_func=lambda x: ["No", "Yes"][x], key="paperless")
-        payment_method = st.selectbox("Payment Method", [0, 1, 2, 3], format_func=lambda x: ["Electronic check", "Mailed check", "Bank transfer", "Credit card"][x], key="payment")
+        contract = st.selectbox("Contract", ["Month-to-month", "One year", "Two year"], key="contract")
+        paperless_billing = st.selectbox("Paperless Billing", ["No", "Yes"], key="paperless")
+        payment_method = st.selectbox("Payment Method", ["Electronic check", "Mailed check", "Bank transfer", "Credit card"], key="payment")
         monthly_charges = st.number_input("Monthly Charges ($)", min_value=0.0, max_value=500.0, value=75.50, key="monthly")
     
     total_charges = st.number_input("Total Charges ($)", min_value=0.0, max_value=50000.0, value=1812.00, key="total")
@@ -262,56 +262,64 @@ elif page == "📁 Batch Prediction":
             
             if st.button("🔮 Predict All", use_container_width=True):
                 st.info("⏳ Processing batch predictions...")
-                
+                batch_result = predictor.predict_batch(df)
+                if batch_result["status"] != "success":
+                    st.error(f"❌ Batch prediction failed: {batch_result.get('error', 'Unknown error')}")
+                    st.stop()
+
+                df_results = df.copy()
                 predictions = []
                 probabilities = []
                 risk_levels = []
-                
-                progress_bar = st.progress(0)
-                
-                for idx, row in df.iterrows():
-                    customer_data = row.to_dict()
-                    result = predictor.predict(customer_data)
-                    
+                errors = []
+
+                for result in batch_result["results"]:
                     if result["status"] == "success":
                         predictions.append(result["prediction"])
                         probabilities.append(result["probability"])
                         risk_levels.append(result["risk_level"])
+                        errors.append("")
                     else:
-                        predictions.append(None)
-                        probabilities.append(None)
-                        risk_levels.append("Error")
-                    
-                    progress_bar.progress((idx + 1) / len(df))
-                
-                # Add results to dataframe
-                df["Prediction"] = predictions
-                df["Churn_Probability"] = probabilities
-                df["Risk_Level"] = risk_levels
-                
-                st.success("✅ Batch prediction complete!")
+                        predictions.append(-1)
+                        probabilities.append(0.0)
+                        risk_levels.append("⚪ ERROR")
+                        errors.append(result.get("error", "Unknown error"))
+
+                df_results["Prediction"] = predictions
+                df_results["Churn_Probability"] = probabilities
+                df_results["Risk_Level"] = risk_levels
+                df_results["Error"] = errors
+
+                summary = batch_result["summary"]
+                if summary["failed"] == 0:
+                    st.success("✅ Batch prediction complete!")
+                else:
+                    st.warning(
+                        f"⚠️ Batch prediction completed with {summary['failed']} failed row(s). "
+                        "See Error column for details."
+                    )
                 
                 st.write("### Results:")
-                st.dataframe(df)
+                st.dataframe(df_results)
                 
                 # Summary statistics
                 st.write("### 📊 Summary Statistics")
                 col_sum1, col_sum2, col_sum3 = st.columns(3)
                 
                 with col_sum1:
-                    churners = (df["Prediction"] == 1).sum()
+                    churners = (df_results["Prediction"] == 1).sum()
                     st.metric("Predicted Churners", churners)
                 
                 with col_sum2:
-                    avg_prob = df["Churn_Probability"].mean()
+                    avg_prob = df_results["Churn_Probability"].mean()
                     st.metric("Avg Churn Probability", f"{avg_prob*100:.2f}%")
                 
                 with col_sum3:
-                    high_risk = (df["Churn_Probability"] >= 0.7).sum()
+                    high_risk = (df_results["Churn_Probability"] >= 0.7).sum()
                     st.metric("High Risk Count", high_risk)
                 
                 # Download results
-                csv = df.to_csv(index=False)
+                csv = df_results.to_csv(index=False)
                 st.download_button(
                     label="📥 Download Results (CSV)",
                     data=csv,
@@ -458,4 +466,3 @@ st.write("""
     Churn Predictor Pro v1.0 | Professional MLOps Architecture | 📊 95.20% Accuracy
     </div>
     """, unsafe_allow_html=True)
-

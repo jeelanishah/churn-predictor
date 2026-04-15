@@ -87,6 +87,24 @@ Option 2: Batch Prediction
 4. Click Predict All
 5. Download results
 
+## API Behavior
+
+- Supports both **human-readable categorical values** (e.g. `Male`, `Two year`) and **indexed UI values** (e.g. `0`, `2`) for categorical fields.
+- Validates all required features and numeric fields before inference.
+- Encodes categorical features before scaling.
+- Guarantees bounded probabilities (`0.0` to `1.0`) and risk labels:
+  - `🔴 HIGH RISK` for `>= 0.70`
+  - `🟡 MEDIUM RISK` for `>= 0.40` and `< 0.70`
+  - `🟢 LOW RISK` for `< 0.40`
+
+### Health Check
+
+Use the **API Info** page in Streamlit to check:
+- API status
+- model/scaler/feature/encoder readiness
+- model source (`artifacts` or fallback training)
+- API version
+
 ## Features Used (19 Total)
 
 1. gender

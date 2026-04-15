@@ -182,10 +182,8 @@ class ChurnPredictor:
             and isinstance(original_value, (int, np.integer, float, np.floating))
         ):
             logger.warning(
-                "Value '%s' for feature '%s' not in classes %s; using fallback '%s'",
-                value,
+                "Numeric category input for feature '%s' is not available in classes; using fallback '%s'",
                 feature,
-                allowed_values,
                 allowed_values[0],
             )
             return allowed_values[0]
@@ -242,7 +240,7 @@ class ChurnPredictor:
         try:
             prepared = self._prepare_input(customer_data)
             scaled = self.scaler.transform(prepared)
-            if np.isnan(scaled).any() or not np.isfinite(scaled).all():
+            if not np.all(np.isfinite(scaled)):
                 raise ValueError("Scaling produced invalid values")
 
             prediction = int(self.model.predict(scaled)[0])

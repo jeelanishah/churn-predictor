@@ -280,8 +280,8 @@ elif page == "📁 Batch Prediction":
                         risk_levels.append(result["risk_level"])
                         errors.append("")
                     else:
-                        predictions.append(-1)
-                        probabilities.append(0.0)
+                        predictions.append(None)
+                        probabilities.append(None)
                         risk_levels.append("⚪ ERROR")
                         errors.append(result.get("error", "Unknown error"))
 
@@ -311,11 +311,12 @@ elif page == "📁 Batch Prediction":
                     st.metric("Predicted Churners", churners)
                 
                 with col_sum2:
-                    avg_prob = df_results["Churn_Probability"].mean()
-                    st.metric("Avg Churn Probability", f"{avg_prob*100:.2f}%")
+                    successful_rows = df_results[df_results["Error"] == ""]
+                    avg_prob = successful_rows["Churn_Probability"].mean()
+                    st.metric("Avg Churn Probability", f"{(avg_prob * 100) if pd.notna(avg_prob) else 0.0:.2f}%")
                 
                 with col_sum3:
-                    high_risk = (df_results["Churn_Probability"] >= 0.7).sum()
+                    high_risk = (successful_rows["Churn_Probability"] >= 0.7).sum()
                     st.metric("High Risk Count", high_risk)
                 
                 # Download results

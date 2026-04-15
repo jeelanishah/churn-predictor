@@ -58,6 +58,11 @@ class ChurnPredictor:
             
             # Ensure correct column order (IMPORTANT!)
             df = df[self.feature_names]
+
+            # Encode categorical features before scaling
+            for column, encoder in self.label_encoders.items():
+                if column in df.columns:
+                    df[column] = encoder.transform(df[column])
             
             # Scale features
             X_scaled = self.scaler.transform(df)

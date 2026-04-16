@@ -157,6 +157,18 @@ class TestCaseSensitivity:
         result = predictor.predict(high_risk_customer)
         assert result["status"] == "success"
 
+    def test_multiple_lines_no_phone_service_lowercase(self, predictor, high_risk_customer):
+        """Lowercase 'no phone service' should normalise to 'No phone service'."""
+        high_risk_customer["MultipleLines"] = "no phone service"
+        result = predictor.predict(high_risk_customer)
+        assert result["status"] == "success"
+
+    def test_online_security_no_internet_service_lowercase(self, predictor, high_risk_customer):
+        """Lowercase 'no internet service' should normalise to 'No internet service'."""
+        high_risk_customer["OnlineSecurity"] = "no internet service"
+        result = predictor.predict(high_risk_customer)
+        assert result["status"] == "success"
+
 
 # ---------------------------------------------------------------------------
 # Whitespace handling

@@ -1,0 +1,83 @@
+{
+  "info": {
+    "name": "Churn Predictor API",
+    "description": "Postman collection for testing the Churn Predictor Pro API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        },
+        "description": "Check if the API is running and the model is loaded"
+      },
+      "response": [
+        {
+          "name": "Success",
+          "status": "OK",
+          "code": 200,
+          "body": "{\"status\": \"✅ API is running\", \"model_loaded\": true, \"version\": \"2.0.0\"}"
+        }
+      ]
+    },
+    {
+      "name": "Predict - Low Risk Customer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"Male\",\n  \"SeniorCitizen\": 0,\n  \"Partner\": \"Yes\",\n  \"Dependents\": \"Yes\",\n  \"tenure\": 72,\n  \"PhoneService\": \"Yes\",\n  \"MultipleLines\": \"Yes\",\n  \"InternetService\": \"DSL\",\n  \"OnlineSecurity\": \"Yes\",\n  \"OnlineBackup\": \"Yes\",\n  \"DeviceProtection\": \"Yes\",\n  \"TechSupport\": \"Yes\",\n  \"StreamingTV\": \"Yes\",\n  \"StreamingMovies\": \"Yes\",\n  \"Contract\": \"Two year\",\n  \"PaperlessBilling\": \"Yes\",\n  \"PaymentMethod\": \"Bank transfer\",\n  \"MonthlyCharges\": 65.50,\n  \"TotalCharges\": 4716.00\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/predict",
+          "host": ["{{base_url}}"],
+          "path": ["predict"]
+        },
+        "description": "Predict churn for a loyal, long-tenure customer (expected LOW RISK)"
+      },
+      "response": []
+    },
+    {
+      "name": "Predict - High Risk Customer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"Female\",\n  \"SeniorCitizen\": 0,\n  \"Partner\": \"No\",\n  \"Dependents\": \"No\",\n  \"tenure\": 2,\n  \"PhoneService\": \"No\",\n  \"MultipleLines\": \"No phone service\",\n  \"InternetService\": \"Fiber optic\",\n  \"OnlineSecurity\": \"No\",\n  \"OnlineBackup\": \"No\",\n  \"DeviceProtection\": \"No\",\n  \"TechSupport\": \"No\",\n  \"StreamingTV\": \"No\",\n  \"StreamingMovies\": \"No\",\n  \"Contract\": \"Month-to-month\",\n  \"PaperlessBilling\": \"Yes\",\n  \"PaymentMethod\": \"Electronic check\",\n  \"MonthlyCharges\": 89.99,\n  \"TotalCharges\": 150.00\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/predict",
+          "host": ["{{base_url}}"],
+          "path": ["predict"]
+        },
+        "description": "Predict churn for a new, unengaged customer (expected HIGH RISK)"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8501",
+      "description": "Base URL for the Churn Predictor API. Update to your Render URL after deployment."
+    }
+  ]
+}

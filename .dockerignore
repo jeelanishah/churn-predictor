@@ -1,0 +1,70 @@
+# Git
+.git
+.gitignore
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyo
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+tests/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.backup
+*.old
+*.bak
+
+# Temporary
+*.tmp
+*.temp
+tmp/
+
+# Documentation
+*.md
+DEPLOYMENT_GUIDE.md
+postman/
+
+# CI/CD
+.github/
+
+# Dev files
+analytics_calculator.py
+analytics_results.json
+create_sample_data.py
+download_real_data.py
+train_and_save.py
+predict.py
+test_*.py
+test_*.csv
+app.py.backup
+app.py.old
+main
+
+# Backend (separate service, not used in Streamlit container)
+backend/

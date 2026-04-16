@@ -1,0 +1,178 @@
+{
+  "info": {
+    "_postman_id": "churn-predictor-api-v2",
+    "name": "ChurnPredictor API",
+    "description": "API testing collection for the Churn Predictor Pro application.\n\nThe ChurnPredictor API is a Python class used directly by the Streamlit frontend — there is no HTTP server. This collection documents the data contracts and can be used together with a local HTTP wrapper for integration testing.\n\nSet the `base_url` variable to your deployment URL (e.g. `https://churn-predictor.onrender.com`).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8501",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check — Streamlit health endpoint",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/_stcore/health",
+              "host": ["{{base_url}}"],
+              "path": ["_stcore", "health"]
+            },
+            "description": "Verify that the Streamlit app is running and healthy. Returns HTTP 200 when the server is ready."
+          },
+          "response": [
+            {
+              "name": "200 OK — server is healthy",
+              "status": "OK",
+              "code": 200,
+              "header": [],
+              "body": "ok"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Single Prediction",
+      "item": [
+        {
+          "name": "Predict — High Risk Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gender\": \"Female\",\n  \"SeniorCitizen\": 0,\n  \"Partner\": \"No\",\n  \"Dependents\": \"No\",\n  \"tenure\": 2,\n  \"PhoneService\": \"Yes\",\n  \"MultipleLines\": \"No\",\n  \"InternetService\": \"Fiber optic\",\n  \"OnlineSecurity\": \"No\",\n  \"OnlineBackup\": \"No\",\n  \"DeviceProtection\": \"No\",\n  \"TechSupport\": \"No\",\n  \"StreamingTV\": \"No\",\n  \"StreamingMovies\": \"No\",\n  \"Contract\": \"Month-to-month\",\n  \"PaperlessBilling\": \"Yes\",\n  \"PaymentMethod\": \"Electronic check\",\n  \"MonthlyCharges\": 85.0,\n  \"TotalCharges\": 170.0\n}"
+            },
+            "description": "New customer on a month-to-month contract with fiber optic internet and electronic check payment — expected HIGH RISK.\n\nExpected response fields:\n- `status`: `\"success\"`\n- `prediction`: `0` or `1`\n- `probability`: float `0.0`–`1.0`\n- `probability_churn`: float `0.0`–`1.0`\n- `probability_no_churn`: float `0.0`–`1.0`\n- `risk_level`: `\"🔴 HIGH RISK\"` | `\"🟡 MEDIUM RISK\"` | `\"🟢 LOW RISK\"`"
+          },
+          "response": [
+            {
+              "name": "Success — HIGH RISK",
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"success\",\n  \"prediction\": 1,\n  \"probability\": 0.8234,\n  \"probability_churn\": 0.8234,\n  \"probability_no_churn\": 0.1766,\n  \"risk_level\": \"🔴 HIGH RISK\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Predict — Low Risk Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gender\": \"Male\",\n  \"SeniorCitizen\": 0,\n  \"Partner\": \"Yes\",\n  \"Dependents\": \"Yes\",\n  \"tenure\": 72,\n  \"PhoneService\": \"Yes\",\n  \"MultipleLines\": \"Yes\",\n  \"InternetService\": \"DSL\",\n  \"OnlineSecurity\": \"Yes\",\n  \"OnlineBackup\": \"Yes\",\n  \"DeviceProtection\": \"Yes\",\n  \"TechSupport\": \"Yes\",\n  \"StreamingTV\": \"Yes\",\n  \"StreamingMovies\": \"Yes\",\n  \"Contract\": \"Two year\",\n  \"PaperlessBilling\": \"No\",\n  \"PaymentMethod\": \"Bank transfer (automatic)\",\n  \"MonthlyCharges\": 65.0,\n  \"TotalCharges\": 4680.0\n}"
+            },
+            "description": "Long-tenure customer on a two-year contract — expected LOW RISK."
+          },
+          "response": [
+            {
+              "name": "Success — LOW RISK",
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"success\",\n  \"prediction\": 0,\n  \"probability\": 0.0512,\n  \"probability_churn\": 0.0512,\n  \"probability_no_churn\": 0.9488,\n  \"risk_level\": \"🟢 LOW RISK\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Predict — Error: Missing Feature",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gender\": \"Female\",\n  \"SeniorCitizen\": 0\n}"
+            },
+            "description": "Request with missing required features — expected error response."
+          },
+          "response": [
+            {
+              "name": "Error — missing features",
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"error\",\n  \"error\": \"Missing required features: ['Partner', 'Dependents', ...]\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Batch Prediction",
+      "item": [
+        {
+          "name": "Batch Predict — Two Customers",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"gender\": \"Female\",\n    \"SeniorCitizen\": 0,\n    \"Partner\": \"No\",\n    \"Dependents\": \"No\",\n    \"tenure\": 2,\n    \"PhoneService\": \"Yes\",\n    \"MultipleLines\": \"No\",\n    \"InternetService\": \"Fiber optic\",\n    \"OnlineSecurity\": \"No\",\n    \"OnlineBackup\": \"No\",\n    \"DeviceProtection\": \"No\",\n    \"TechSupport\": \"No\",\n    \"StreamingTV\": \"No\",\n    \"StreamingMovies\": \"No\",\n    \"Contract\": \"Month-to-month\",\n    \"PaperlessBilling\": \"Yes\",\n    \"PaymentMethod\": \"Electronic check\",\n    \"MonthlyCharges\": 85.0,\n    \"TotalCharges\": 170.0\n  },\n  {\n    \"gender\": \"Male\",\n    \"SeniorCitizen\": 0,\n    \"Partner\": \"Yes\",\n    \"Dependents\": \"Yes\",\n    \"tenure\": 72,\n    \"PhoneService\": \"Yes\",\n    \"MultipleLines\": \"Yes\",\n    \"InternetService\": \"DSL\",\n    \"OnlineSecurity\": \"Yes\",\n    \"OnlineBackup\": \"Yes\",\n    \"DeviceProtection\": \"Yes\",\n    \"TechSupport\": \"Yes\",\n    \"StreamingTV\": \"Yes\",\n    \"StreamingMovies\": \"Yes\",\n    \"Contract\": \"Two year\",\n    \"PaperlessBilling\": \"No\",\n    \"PaymentMethod\": \"Bank transfer (automatic)\",\n    \"MonthlyCharges\": 65.0,\n    \"TotalCharges\": 4680.0\n  }\n]"
+            },
+            "description": "Batch prediction for two customers.\n\nExpected response includes a `results` array and a `summary` object."
+          },
+          "response": [
+            {
+              "name": "Success — batch of 2",
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"success\",\n  \"results\": [\n    {\n      \"status\": \"success\",\n      \"prediction\": 1,\n      \"probability\": 0.8234,\n      \"probability_churn\": 0.8234,\n      \"probability_no_churn\": 0.1766,\n      \"risk_level\": \"🔴 HIGH RISK\",\n      \"row_index\": 0\n    },\n    {\n      \"status\": \"success\",\n      \"prediction\": 0,\n      \"probability\": 0.0512,\n      \"probability_churn\": 0.0512,\n      \"probability_no_churn\": 0.9488,\n      \"risk_level\": \"🟢 LOW RISK\",\n      \"row_index\": 1\n    }\n  ],\n  \"summary\": {\n    \"total\": 2,\n    \"successful\": 2,\n    \"failed\": 0\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

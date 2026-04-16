@@ -1,0 +1,50 @@
+# Docker ignore — keep the build context small
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# IDE / OS artifacts
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# CI / testing
+.github/
+tests/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Documentation
+*.md
+postman/
+
+# Environment variables
+.env
+.env.local
+
+# Jupyter notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp

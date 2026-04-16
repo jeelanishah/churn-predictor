@@ -1,98 +1,127 @@
 # Churn Predictor Pro
 
-Advanced Machine Learning Solution for Customer Churn Prediction
+> **Live Demo:** Deploy to Render and get your URL in minutes — see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
 
-## Project Overview
+Advanced Machine Learning solution for predicting customer churn with **95.20% accuracy** — built as a professional full-stack application with Streamlit frontend, Python API backend, and Docker containerization.
 
-Churn Predictor Pro is a professional-grade machine learning application that predicts customer churn with 95.20% accuracy. It features a modern Streamlit frontend with a clean API backend.
+---
 
-## Key Metrics
+## 📊 Key Metrics
 
-- Accuracy: 95.20%
-- Precision: 92.50%
-- Recall: 88.30%
-- F1-Score: 90.35%
-- AUC: 0.95
+| Metric | Value |
+|--------|-------|
+| Accuracy | **95.20%** |
+| Precision | **92.50%** |
+| Recall | **88.30%** |
+| F1-Score | **90.35%** |
+| AUC | **0.95** |
 
-## Features
+---
 
-- Single Customer Prediction - Real-time churn prediction
-- Batch Prediction - Process multiple customers via CSV upload
-- Analytics Dashboard - View model performance metrics
-- Risk Assessment - High/Medium/Low risk categorization
-- Professional API - Modular backend architecture
-- Recommendations - Actionable insights for each prediction
+## ✨ Features
 
-## Architecture
+- **🏠 Home** — Project overview & live metrics
+- **👤 Single Prediction** — Real-time churn prediction form with risk assessment
+- **📁 Batch Prediction** — CSV upload, bulk processing & results download
+- **📈 Analytics** — Interactive confusion matrix, ROC curve & model stats
+- **⚙️ API Info** — Live health check & feature reference
 
-Frontend (Streamlit app.py)
-    ↓
-API Backend (api.py)
-    ↓
-Machine Learning Model
-    ↓
-Returns: Prediction, Probability, Risk Level
+---
 
-## Installation
+## 🏗️ Architecture
 
-**Prerequisites:**
-- Python 3.10 or higher
-- pip (Python package manager)
+```
+Browser (Streamlit UI)
+       ↓
+app.py  (Streamlit frontend)
+       ↓
+api.py  (ChurnPredictor class — ML inference)
+       ↓
+model/  (GradientBoostingClassifier artifacts)
+```
 
-**Step 1: Clone Repository**
+---
+
+## 🚀 Quick Start (Local)
+
+### Prerequisites
+
+- Python 3.10+
+- pip
+
+### Steps
+
 ```bash
-git clone https://github.com/YOUR_USERNAME/churn-predictor.git
+# 1. Clone the repository
+git clone https://github.com/jeelanishah/churn-predictor.git
 cd churn-predictor
-```
 
-**Step 2: Install Dependencies**
+# 2. Create a virtual environment
+python -m venv venv
+source venv/bin/activate          # Linux / macOS
+venv\Scripts\activate             # Windows
 
-Windows (Anaconda Terminal):
-```bash
+# 3. Install dependencies
 pip install -r requirements.txt
-```
 
-Linux / macOS:
-```bash
-pip install -r requirements.txt
-```
-
-**Step 3: Run Application**
-```bash
+# 4. Run the app
 streamlit run app.py
 ```
 
-The app will open at: http://localhost:8501
+Open **http://localhost:8501** in your browser.
 
-**Step 4 (Optional): Retrain Model**
-```bash
-python train_and_save.py
-```
+---
 
-## Docker
+## 🐳 Docker (Local)
 
 ```bash
-# Build image
+# Build & run with Docker Compose
+docker compose up --build
+
+# Or build manually
 docker build -t churn-predictor .
-
-# Run container
 docker run -p 8501:8501 churn-predictor
-
-# Or use Docker Compose
-docker-compose up
 ```
 
-The app will be available at: http://localhost:8501
+App will be available at **http://localhost:8501**.
 
-## Project Structure
+---
+
+## ☁️ Cloud Deployment (Render)
+
+See **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** for the complete step-by-step guide.
+
+**TL;DR:**
+1. Push this repo to GitHub
+2. Create a new **Web Service** on [Render](https://render.com)
+3. Connect your GitHub repo — Render auto-detects `render.yaml`
+4. Click **Deploy** → get your live URL in ~5 minutes
+
+---
+
+## 📁 Project Structure
 
 ```
 churn-predictor/
-├── README.md
-├── requirements.txt
-├── app.py              ← Streamlit frontend
-├── api.py              ← Local ML API (no HTTP server needed)
-├── train_and_save.py   ← Retrain model from data/churn_data.csv
+├── README.md                        # This file
+├── DEPLOYMENT_GUIDE.md              # Step-by-step deployment
+├── API_DOCUMENTATION.md             # API reference
+├── TROUBLESHOOTING.md               # Troubleshooting guide
+├── requirements.txt                 # Python dependencies
+├── Dockerfile                       # Production container (multi-stage)
+├── docker-compose.yml               # Local development
+├── render.yaml                      # Render auto-deployment config
+├── .dockerignore                    # Docker build exclusions
+├── .gitignore                       # Git exclusions
+├── .github/
+│   └── workflows/
+│       ├── tests.yml                # CI test pipeline
+│       └── deploy.yml               # CI/CD deploy pipeline
+├── .streamlit/
+│   └── config.toml                  # Streamlit cloud settings
+├── app.py                           # Streamlit frontend (5 pages)
+├── api.py                           # ML inference backend
+├── train_and_save.py                # Retrain model from data/churn_data.csv
 ├── model/
 │   ├── churn_model.pkl
 │   ├── scaler.pkl
@@ -101,160 +130,107 @@ churn-predictor/
 │   └── target_encoder.pkl
 ├── data/
 │   └── churn_data.csv
-├── .streamlit/
-│   └── config.toml
-├── Dockerfile
-└── docker-compose.yml
+├── tests/
+│   ├── conftest.py                  # Shared fixtures
+│   ├── requirements.txt             # Test dependencies
+│   ├── test_api.py                  # API unit tests
+│   ├── test_predictions.py          # Prediction accuracy tests
+│   ├── test_integration.py          # End-to-end integration tests
+│   └── test_edge_cases.py           # Edge-case tests
+└── postman/
+    └── ChurnPredictor_API.postman_collection.json
 ```
 
-## Usage
+---
 
-Option 1: Single Customer Prediction
-1. Open the app: http://localhost:8501
-2. Go to Single Prediction tab
-3. Fill in customer details
-4. Click Predict Churn
-5. View results with risk level
+## 🧪 Testing
 
-Option 2: Batch Prediction
-1. Prepare a CSV file with customer data
-2. Go to Batch Prediction tab
-3. Upload your CSV file
-4. Click Predict All
-5. Download results
+```bash
+pip install -r tests/requirements.txt
+pytest tests/ -v
+```
 
-## API Behavior
+Tests cover:
+- Health check responses
+- Single prediction accuracy
+- Risk level classification
+- Batch prediction via DataFrame / list
+- Feature encoding (categorical & numeric)
+- CSV round-trip integration
+- Edge cases and error handling
 
-- Supports both **human-readable categorical values** (e.g. `Male`, `Two year`) and **indexed UI values** (e.g. `0`, `2`) for categorical fields.
-- Validates all required features and numeric fields before inference.
-- Encodes categorical features before scaling.
-- Guarantees bounded probabilities (`0.0` to `1.0`) and risk labels:
-  - `🔴 HIGH RISK` for `>= 0.70`
-  - `🟡 MEDIUM RISK` for `>= 0.40` and `< 0.70`
-  - `🟢 LOW RISK` for `< 0.40`
+---
 
-### Health Check
+## 📋 Input Features (19 Total)
 
-Use the **API Info** page in Streamlit to check:
-- API status
-- model/scaler/feature/encoder readiness
-- model source (`artifacts` or fallback training)
-- API version
+| # | Feature | Type | Example Values |
+|---|---------|------|----------------|
+| 1 | gender | Categorical | Male, Female |
+| 2 | SeniorCitizen | Binary | 0, 1 |
+| 3 | Partner | Categorical | No, Yes |
+| 4 | Dependents | Categorical | No, Yes |
+| 5 | tenure | Numeric | 0–72 |
+| 6 | PhoneService | Categorical | No, Yes |
+| 7 | MultipleLines | Categorical | No, Yes, No phone service |
+| 8 | InternetService | Categorical | DSL, Fiber optic, No |
+| 9 | OnlineSecurity | Categorical | No, Yes, No internet service |
+| 10 | OnlineBackup | Categorical | No, Yes, No internet service |
+| 11 | DeviceProtection | Categorical | No, Yes, No internet service |
+| 12 | TechSupport | Categorical | No, Yes, No internet service |
+| 13 | StreamingTV | Categorical | No, Yes, No internet service |
+| 14 | StreamingMovies | Categorical | No, Yes, No internet service |
+| 15 | Contract | Categorical | Month-to-month, One year, Two year |
+| 16 | PaperlessBilling | Categorical | No, Yes |
+| 17 | PaymentMethod | Categorical | Electronic check, Mailed check, Bank transfer, Credit card |
+| 18 | MonthlyCharges | Numeric | 0.0–500.0 |
+| 19 | TotalCharges | Numeric | 0.0–50000.0 |
 
-## Features Used (19 Total)
+---
 
-1. gender
-2. SeniorCitizen
-3. Partner
-4. Dependents
-5. tenure
-6. PhoneService
-7. MultipleLines
-8. InternetService
-9. OnlineSecurity
-10. OnlineBackup
-11. DeviceProtection
-12. TechSupport
-13. StreamingTV
-14. StreamingMovies
-15. Contract
-16. PaperlessBilling
-17. PaymentMethod
-18. MonthlyCharges
-19. TotalCharges
+## 🔍 Risk Levels
 
-## Model Information
+| Probability | Risk Level |
+|-------------|-----------|
+| >= 70% | 🔴 HIGH RISK — immediate retention action needed |
+| 40–69% | 🟡 MEDIUM RISK — monitor & engage |
+| < 40% | 🟢 LOW RISK — satisfied customer |
 
-- Algorithm: Gradient Boosting Classifier
-- Training Date: 2024-04-14
-- Training Samples: 14000
-- Accuracy: 95.20%
+---
 
-## Pages
+## 💡 Business Insights
 
-Home: Project overview and metrics
-Single Prediction: Customer prediction form
-Batch Prediction: CSV upload and batch processing
-Analytics: Model performance metrics
-API Info: API health check and information
-
-## Testing
-
-Test Data - Low Risk:
-Expected: LOW RISK (less than 40% probability)
-Age: 65, Tenure: 72 months, Long-term customer
-
-Test Data - High Risk:
-Expected: HIGH RISK (more than 70% probability)
-Age: 25, Tenure: 2 months, New customer
-
-Test Data - Medium Risk:
-Expected: MEDIUM RISK (40-70% probability)
-Age: 45, Tenure: 24 months, Mixed services
-
-## Model Performance
-
-Confusion Matrix:
-              Predicted No  Predicted Yes
-Actual No         8520          620
-Actual Yes        1480         3380
-
-## Business Insights
-
-High Risk Indicators:
+**High churn indicators:**
 - Month-to-month contract
-- New customers (low tenure)
-- Fiber optic internet service
+- Tenure < 12 months
+- Fiber optic internet with no add-on services
 - Electronic check payment
-- High monthly charges
+- No partner or dependents
 
-Low Risk Indicators:
-- Long-term contracts
-- High tenure (2+ years)
-- Multiple services
-- Stable payment method
-- Online security/backup
+**Low churn indicators:**
+- Two-year contract
+- Tenure > 36 months
+- Multiple premium services (security, backup, support)
+- Stable payment method (bank transfer / credit card)
 
-## Deployment
+---
 
-**Cloud Deployment (Render - Free):**
-1. Push your repository to GitHub
-2. Go to [render.com](https://render.com) and create a new Web Service
-3. Connect your GitHub repository
-4. Set the start command: `streamlit run app.py --server.port=8501 --server.address=0.0.0.0`
-5. Deploy and get your public URL
+## 📦 Model Information
 
-**Cloud Deployment (Railway):**
-1. Push your repository to GitHub
-2. Go to [railway.app](https://railway.app) and create a new project
-3. Connect your GitHub repository
-4. Railway auto-detects the Dockerfile and deploys
-5. Get your public URL
+- **Algorithm:** Gradient Boosting Classifier
+- **Training samples:** ~14,000
+- **Accuracy:** 95.20%
+- **Fallback:** Auto-retrains from bundled dataset if pickle artifacts are unavailable
 
-## License
+---
 
-MIT License
+## 👤 Author
 
-## Author
+**Jeelani Shah**
+GitHub: [@jeelanishah](https://github.com/jeelanishah)
+Internship Capstone Project — April 2026
 
-Your Name
-GitHub: @your-username
-Email: your.email@example.com
-Internship: Company Name
+---
 
-## Support
+## 📄 License
 
-For issues or questions:
-Open an issue on GitHub
-Email: your.email@example.com
-
-## Version
-
-Version 1.0.0 (2024-04-14)
-- Initial release
-- 95.20% accuracy
-- Single and batch predictions
-- Analytics dashboard
-- Professional API
-
-Made with love for the Internship Program
+MIT License — free to use, modify and distribute.

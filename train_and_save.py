@@ -13,7 +13,9 @@ print("=" * 60)
 
 # Step 1: Load data
 print("\n📊 Loading data...")
-df = pd.read_csv('../data/Churn_Modelling.csv')
+data_path = os.path.join(os.path.dirname(__file__), 'data', 'churn_data.csv')
+df = pd.read_csv(data_path)
+df = df.drop(columns=["customerID"], errors="ignore")
 print(f"✅ Data loaded! Shape: {df.shape}")
 
 # Step 2: Prepare features
@@ -24,7 +26,7 @@ X = df.drop('Churn', axis=1)
 y = df['Churn']
 
 # Convert target to binary (0 = No, 1 = Yes)
-y = (y == 'Yes').astype(int)
+y = (y.astype(str).str.strip().str.lower() == 'yes').astype(int)
 
 print(f"✅ Features: {X.shape[1]}")
 print(f"✅ Samples: {X.shape[0]}")
@@ -37,7 +39,7 @@ label_encoders = {}
 
 for col in categorical_cols:
     le = LabelEncoder()
-    X[col] = le.fit_transform(X[col])
+    X[col] = le.fit_transform(X[col].astype(str).str.strip())
     label_encoders[col] = le
 
 print(f"✅ Encoded {len(categorical_cols)} categorical columns")
@@ -101,27 +103,28 @@ print(f"✅ F1-Score: {f1 * 100:.2f}%")
 # Step 8: Save model and artifacts
 print("\n📊 Saving model...")
 
-os.makedirs('model', exist_ok=True)
+model_dir = os.path.join(os.path.dirname(__file__), 'model')
+os.makedirs(model_dir, exist_ok=True)
 
-with open('model/churn_model.pkl', 'wb') as f:
+with open(os.path.join(model_dir, 'churn_model.pkl'), 'wb') as f:
     pickle.dump(model, f)
 print(f"✅ Model saved: model/churn_model.pkl")
 
-with open('model/scaler.pkl', 'wb') as f:
+with open(os.path.join(model_dir, 'scaler.pkl'), 'wb') as f:
     pickle.dump(scaler, f)
 print(f"✅ Scaler saved: model/scaler.pkl")
 
-with open('model/feature_names.pkl', 'wb') as f:
+with open(os.path.join(model_dir, 'feature_names.pkl'), 'wb') as f:
     pickle.dump(feature_names, f)
 print(f"✅ Feature names saved: model/feature_names.pkl")
 
-with open('model/label_encoders.pkl', 'wb') as f:
+with open(os.path.join(model_dir, 'label_encoders.pkl'), 'wb') as f:
     pickle.dump(label_encoders, f)
 print(f"✅ Label encoders saved: model/label_encoders.pkl")
 
 # Target encoder (for converting predictions back)
 target_encoder = {'No': 0, 'Yes': 1}
-with open('model/target_encoder.pkl', 'wb') as f:
+with open(os.path.join(model_dir, 'target_encoder.pkl'), 'wb') as f:
     pickle.dump(target_encoder, f)
 print(f"✅ Target encoder saved: model/target_encoder.pkl")
 

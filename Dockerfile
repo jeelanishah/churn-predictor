@@ -1,28 +1,31 @@
-# Use Python 3.10 slim image
-FROM python:3.10-slim
+# ── Stage 1: builder ─────────────────────────────────────────────────────────
+FROM python:3.10-slim AS builder
 
-# Set working directory
-WORKDIR /app
+WORKDIR /build
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first (for better caching)
+# Install Python dependencies into a local prefix for copying later
 COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# ── Stage 2: runtime ─────────────────────────────────────────────────────────
+FROM python:3.10-slim AS runtime
 
-# Copy application files
-COPY app.py .
-COPY api.py .
+WORKDIR /app
+
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Copy installed packages from builder stage
+COPY --from=builder /install /usr/local
+
+# Copy only the files needed at runtime
+COPY app.py api.py ./
 COPY model/ ./model/
 COPY data/ ./data/
 COPY .streamlit/ ./.streamlit/
@@ -31,7 +34,8 @@ COPY .streamlit/ ./.streamlit/
 EXPOSE 8501
 
 # Health check
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')" || exit 1
 
 # Run Streamlit app
 CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]

@@ -24,6 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY api.py .
 COPY model/ ./model/
+COPY data/ ./data/
 COPY .streamlit/ ./.streamlit/
 
 # Expose port

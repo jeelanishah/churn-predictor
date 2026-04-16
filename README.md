@@ -35,41 +35,77 @@ Returns: Prediction, Probability, Risk Level
 
 ## Installation
 
-Prerequisites:
+**Prerequisites:**
 - Python 3.10 or higher
 - pip (Python package manager)
 
-Step 1: Clone Repository
+**Step 1: Clone Repository**
+```bash
 git clone https://github.com/YOUR_USERNAME/churn-predictor.git
 cd churn-predictor
+```
 
-Step 2: Create Virtual Environment
-python -m venv venv
-source venv/bin/activate
+**Step 2: Install Dependencies**
 
-Step 3: Install Dependencies
+Windows (Anaconda Terminal):
+```bash
 pip install -r requirements.txt
+```
 
-Step 4: Run Application
+Linux / macOS:
+```bash
+pip install -r requirements.txt
+```
+
+**Step 3: Run Application**
+```bash
 streamlit run app.py
+```
 
 The app will open at: http://localhost:8501
 
+**Step 4 (Optional): Retrain Model**
+```bash
+python train_and_save.py
+```
+
+## Docker
+
+```bash
+# Build image
+docker build -t churn-predictor .
+
+# Run container
+docker run -p 8501:8501 churn-predictor
+
+# Or use Docker Compose
+docker-compose up
+```
+
+The app will be available at: http://localhost:8501
+
 ## Project Structure
 
+```
 churn-predictor/
 ├── README.md
 ├── requirements.txt
-├── app.py
-├── api.py
+├── app.py              ← Streamlit frontend
+├── api.py              ← Local ML API (no HTTP server needed)
+├── train_and_save.py   ← Retrain model from data/churn_data.csv
 ├── model/
 │   ├── churn_model.pkl
 │   ├── scaler.pkl
 │   ├── feature_names.pkl
 │   ├── label_encoders.pkl
 │   └── target_encoder.pkl
-└── .streamlit/
-    └── config.toml
+├── data/
+│   └── churn_data.csv
+├── .streamlit/
+│   └── config.toml
+├── Dockerfile
+└── docker-compose.yml
+```
 
 ## Usage
 
@@ -181,14 +217,19 @@ Low Risk Indicators:
 
 ## Deployment
 
-Docker:
-docker build -t churn-predictor .
-docker run -p 8501:8501 churn-predictor
+**Cloud Deployment (Render - Free):**
+1. Push your repository to GitHub
+2. Go to [render.com](https://render.com) and create a new Web Service
+3. Connect your GitHub repository
+4. Set the start command: `streamlit run app.py --server.port=8501 --server.address=0.0.0.0`
+5. Deploy and get your public URL
 
-Cloud Deployment:
-- Heroku
-- Railway
-- Render
+**Cloud Deployment (Railway):**
+1. Push your repository to GitHub
+2. Go to [railway.app](https://railway.app) and create a new project
+3. Connect your GitHub repository
+4. Railway auto-detects the Dockerfile and deploys
+5. Get your public URL
 
 ## License
 

@@ -245,8 +245,8 @@ class ChurnPredictor:
 
             prediction = int(self.model.predict(scaled)[0])
             probabilities = self.model.predict_proba(scaled)[0]
-            churn_probability = float(np.clip(probabilities[1], 0.0, 1.0))
-            no_churn_probability = float(np.clip(probabilities[0], 0.0, 1.0))
+            churn_probability = float(np.clip(probabilities[0], 0.0, 1.0))
+            no_churn_probability = float(np.clip(probabilities[1], 0.0, 1.0))
 
             return {
                 "status": "success",

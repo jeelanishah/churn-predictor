@@ -139,6 +139,57 @@ class TestModelLoading:
         health = p.health_check()
         assert health["status"] == "✅ API is running"
 
+    def test_fallback_model_trains_successfully(self):
+        """_train_fallback_model should load the bundled dataset and return True."""
+        p = ChurnPredictor.__new__(ChurnPredictor)
+        p.model = None
+        p.scaler = None
+        p.feature_names = None
+        p.label_encoders = {}
+        p.target_encoder = None
+        p.model_source = "unavailable"
+        result = p._train_fallback_model()
+        assert result is True
+        assert p.model is not None
+        assert p.scaler is not None
+        assert p.feature_names is not None
+        assert p.model_source == "fallback_training"
+
+    def test_load_model_falls_back_when_artifacts_missing(self, monkeypatch):
+        """When artifact files are unreadable, load_model triggers fallback training."""
+        import builtins
+        real_open = builtins.open
+
+        def _bad_open(path, *args, **kwargs):
+            if "churn_model.pkl" in str(path):
+                raise FileNotFoundError("simulated missing artifact")
+            return real_open(path, *args, **kwargs)
+
+        monkeypatch.setattr(builtins, "open", _bad_open)
+        p = ChurnPredictor()
+        assert p.model is not None
+        assert p.model_source == "fallback_training"
+
+    def test_predict_raises_error_when_feature_names_unset(self, predictor, high_risk_customer):
+        """predict should return an error when feature_names is not initialised."""
+        predictor.feature_names = None
+        result = predictor.predict(high_risk_customer)
+        assert result["status"] == "error"
+
+    def test_predict_raises_error_when_scaling_produces_invalid_values(
+        self, predictor, high_risk_customer
+    ):
+        """predict should return an error when the scaler outputs non-finite values."""
+        import numpy as np
+
+        class _NanScaler:
+            def transform(self, df):
+                return np.full((1, len(df.columns)), np.nan)
+
+        predictor.scaler = _NanScaler()
+        result = predictor.predict(high_risk_customer)
+        assert result["status"] == "error"
+
 
 # ---------------------------------------------------------------------------
 # Data transformations

@@ -40,7 +40,8 @@ class _DummyModel:
         return np.array([1 if self._prob >= 0.5 else 0])
 
     def predict_proba(self, X):
-        return np.array([[self._prob, 1 - self._prob]])
+        # scikit-learn ordering: [P(class=0)=P(no churn), P(class=1)=P(churn)]
+        return np.array([[1 - self._prob, self._prob]])
 
 
 # ---------------------------------------------------------------------------

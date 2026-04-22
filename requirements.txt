@@ -17,3 +17,4 @@ streamlit
 plotly
 pytest
 httpx
+gunicorn

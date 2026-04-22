@@ -411,6 +411,10 @@ def analytics():
 
     return render_template_string(HTML_MAIN, tab='analytics', body=body, tooltips=TOOLTIPS, features=FEATURES, choices=CHOICES)
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok", "service": "churn-predictor"})
+
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
@@ -430,4 +434,5 @@ def predict():
     })
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
